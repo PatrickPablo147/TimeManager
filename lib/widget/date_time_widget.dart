@@ -6,11 +6,13 @@ class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({Key? key,
     required this.titleText,
     required this.valueText,
-    required this.iconSection}) : super(key: key);
+    required this.iconSection,
+    required this.onTap}) : super(key: key);
 
   final String titleText;
   final String valueText;
   final IconData iconSection;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class DateTimeWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)
               ),
               child: InkWell(
-                onTap: () => print('click'),
+                onTap: onTap ,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   decoration: BoxDecoration(
@@ -49,4 +51,6 @@ class DateTimeWidget extends StatelessWidget {
       ),
     );
   }
+
+
 }

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class TextFieldWidget extends StatelessWidget {
   const TextFieldWidget({Key? key,
     required this.hintText,
-    required this.maxLine}) : super(key: key);
+    required this.maxLine,
+    required this.controller}) : super(key: key);
 
   final String hintText;
   final int maxLine;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class TextFieldWidget extends StatelessWidget {
           hintText: hintText,
         ),
         maxLines: maxLine,
+        controller: controller,
       ),
     );
   }

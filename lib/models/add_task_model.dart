@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:schedule_list/Theme/app_style.dart';
 import 'package:schedule_list/widget/date_time_widget.dart';
 import 'package:schedule_list/widget/textfield_widget.dart';
 
 import '../widget/radio_widget.dart';
 
-class AddNewTaskModel extends StatelessWidget {
-  const AddNewTaskModel({Key? key}) : super(key: key);
+class AddNewTaskModel extends StatefulWidget {
+  AddNewTaskModel({Key? key}) : super(key: key);
+
+  @override
+  State<AddNewTaskModel> createState() => _AddNewTaskModel();
+
+}
+//Adding New Task
+class _AddNewTaskModel extends State<AddNewTaskModel> {
+  //variables
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+  DateTime? _selectedDate;
+  String _date = 'mm/dd/yy';
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +41,9 @@ class AddNewTaskModel extends StatelessWidget {
                 'New Task',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black
                 ),
               ),
             ),
@@ -41,11 +54,11 @@ class AddNewTaskModel extends StatelessWidget {
             const Gap(12),
             const Text('Title Task', style: AppStyle.heading1,),
             const Gap(6),
-            TextFieldWidget(hintText: 'Add Task Name', maxLine: 1),
+            TextFieldWidget(hintText: 'Add Task Name', maxLine: 1, controller: _titleController,),
             const Gap(12),
             const Text('Note', style: AppStyle.heading1,),
             const Gap(6),
-            TextFieldWidget(hintText: 'Add Notes...', maxLine: 4),
+            TextFieldWidget(hintText: 'Add Notes...', maxLine: 4, controller: _noteController,),
             const Gap(12),
             const Text('Category', style: AppStyle.heading1,),
             Row(
@@ -68,9 +81,37 @@ class AddNewTaskModel extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const DateTimeWidget(titleText: 'Date', valueText: 'dd/mm/yy', iconSection: Icons.calendar_month,),
+                DateTimeWidget(
+                    titleText: 'Date',
+                    valueText: DateFormat.yMd().format(_selectedDate!).toString(),
+                    iconSection: Icons.calendar_month,
+                    onTap: () async {
+                      DateTime? datePicker = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2021),
+                          lastDate: DateTime(2025)
+                      );
+                      if(datePicker != null) {
+                        setState(() {
+                          _selectedDate = datePicker;
+                        });
+                      }
+                      else {
+                        print("It's null or something is wrong");
+                      }
+                    }
+                ),
                 const Gap(12),
-                const DateTimeWidget(titleText: 'Time', valueText: 'hh : mm', iconSection: Icons.access_time_rounded,)
+                DateTimeWidget(
+                  titleText: 'Time',
+                  valueText: 'hh : mm',
+                  iconSection: Icons.access_time_rounded,
+                  onTap: () => showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now()
+                  ),
+                )
               ],
             ),
 
@@ -81,16 +122,16 @@ class AddNewTaskModel extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.blue.shade800,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)
-                      ),
-                      side: BorderSide(
-                        color: Colors.blue.shade800
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16)
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.blue.shade800,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        side: BorderSide(
+                            color: Colors.blue.shade800
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16)
                     ),
                     onPressed: () {},
                     child: const Text('Cancel'),
